@@ -1,17 +1,17 @@
 <?php
 
-require_once 'Creation/CreationRelation.php';
+require_once 'Creation/CreationObject.php';
 
-class CreationTrigger extends CreationRelation
+class CreationTrigger extends CreationObject
 {
 	// {{{ protected function parseName()
 
 	protected function parseName()
 	{
-		$regexp = '/create( or replace)? trigger ([a-zA-Z0-9]+)/ui';
+		$regexp = '/create\s+trigger\s+([a-zA-Z0-9_]+)/ui';
 		preg_match($regexp, $this->sql, $matches);
 
-		return $matches[2];
+		return $matches[1];
 	}
 
 	// }}}
@@ -19,10 +19,10 @@ class CreationTrigger extends CreationRelation
 
 	protected function parseDeps()
 	{
-		$regexp = '/create( or replace)? trigger ([a-zA-Z0-9]+) on ([a-zA-Z0-9]+)/ui';
+		$regexp = '/create\s+trigger\s+([a-zA-Z0-9_]+)\s+on\s+([a-zA-Z0-9_]+)/ui';
 		preg_match_all($regexp, $this->sql, $matches);
 
-		return $matches[3];
+		return $matches[2];
 	}
 
 	// }}}

@@ -1,14 +1,14 @@
 <?php
 
-require_once 'Creation/CreationRelation.php';
+require_once 'Creation/CreationObject.php';
 
-class CreationTable extends CreationRelation
+class CreationTable extends CreationObject
 {
 	// {{{ protected function parseName()
 
 	protected function parseName()
 	{
-		$regexp = '/create table ([a-zA-Z0-9]+)/ui';
+		$regexp = '/create\s+table\s+([a-zA-Z0-9_]+)/ui';
 		preg_match($regexp, $this->sql, $matches);
 
 		return $matches[1];
@@ -19,7 +19,7 @@ class CreationTable extends CreationRelation
 
 	protected function parseDeps()
 	{
-		$regexp = '/references ([a-zA-Z0-9]+)\(/ui';
+		$regexp = '/references\s+([a-zA-Z0-9_]+)\(/ui';
 		preg_match_all($regexp, $this->sql, $matches);
 
 		return $matches[1];

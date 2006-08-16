@@ -1,6 +1,6 @@
 <?php
 
-abstract class CreationRelation
+abstract class CreationObject
 {
 	// {{{ public properties
 

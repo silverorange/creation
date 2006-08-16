@@ -5,18 +5,15 @@ require_once 'MDB2.php';
 require_once 'SwatDB/SwatDB.php';
 require_once 'SwatDB/exceptions/SwatDBException.php';
 require_once 'Swat/exceptions/SwatException.php';
-require_once 'Creation/CreationTable.php';
-require_once 'Creation/CreationView.php';
-require_once 'Creation/CreationFunction.php';
-require_once 'Creation/CreationTrigger.php';
+require_once 'Creation/CreationFile.php';
 
 class CreationProcess
 {
 	public $dsn = null;
 	public $db = null;
 
-	private $relations = array();
-	private $processed_relations = array();
+	private $objects = array();
+	private $processed_objects = array();
 	private $stack = array();
 
 	// {{{ public function run()
@@ -25,101 +22,55 @@ class CreationProcess
 	{
 		$this->connectDB();
 
-		foreach ($this->relations as $relation)
-			$this->createRelation($relation);
+		foreach ($this->objects as $object)
+			$this->createObject($object);
 	}
 
 	// }}}
-	// {{{ public function addTable()
+	// {{{ public function addFile()
 
-	public function addTable($filename)
+	public function addFile($filename)
 	{
-		$sql = file_get_contents($filename);
-		$table = new CreationTable($sql);
-		$this->relations[$table->name] = $table;
+		echo "Adding file ", $filename, "\n";
+		$file = new CreationFile($filename);
+		$objects = $file->getObjects();
+		echo '    ', implode(', ', array_keys($objects)), "\n";
+		$this->objects = array_merge($this->objects, $objects);
 	}
 
 	// }}}
-	// {{{ public function addView()
+	// {{{ private function createObject()
 
-	public function addView($filename)
+	private function createObject(CreationObject $object)
 	{
-		$sql = file_get_contents($filename);
-		$view = new CreationView($sql);
-		$this->relations[$view->name] = $view;
-	}
-
-	// }}}
-	// {{{ public function addFunction()
-
-	public function addFunction($filename)
-	{
-		$sql = file_get_contents($filename);
-		$function = new CreationFunction($sql);
-		$this->relations[$function->name] = $function;
-	}
-
-	// }}}
-	// {{{ public function addTrigger()
-
-	public function addTrigger($filename)
-	{
-		$sql = file_get_contents($filename);
-		$trigger = new CreationTrigger($sql);
-		$this->relations[$trigger->name] = $trigger;
-	}
-
-	// }}}
-	// {{{ public static function findSqlFiles()
-
-	public static function findSqlFiles($path)
-	{
-		$files = scandir($path);
-
-		foreach ($files as $key => $file) {
-			if (substr($file, -3) === 'sql')
-				$files[$key] = $path.'/'.$file;
-			else
-				unset($files[$key]);
-		}
-
-		return $files;
-	}
-
-	// }}}
-	// {{{ private function createRelation()
-
-	private function createRelation(CreationRelation $relation)
-	{
-		if (in_array($relation->name, $this->processed_relations))
+		if (in_array($object->name, $this->processed_objects))
 			return;
 
-		if (in_array($relation->name, $this->stack)) {
+		if (in_array($object->name, $this->stack)) {
 			ob_start();
-			echo 'Circular dependency on relation ', $relation->name, ".\n";
-			print_r($relation->deps);
+			echo 'Circular dependency on object ', $object->name, ".\n";
+			print_r($object->deps);
 			$message = ob_get_clean();
 			throw new SwatException($message);
 		}
 
-		array_push($this->stack, $relation->name);
+		array_push($this->stack, $object->name);
 
-		foreach ($relation->deps as $dep) {
-			$dep_relation = $this->findRelation($dep);
+		foreach ($object->deps as $dep) {
+			$dep_object = $this->findObject($dep);
 
-			if ($dep_relation === null)
-				printf("Warning: dependent relation '$dep' not found, skipping\n");
+			if ($dep_object === null)
+				printf("Warning: dependent object '$dep' not found, skipping\n");
 			else
-				$this->createRelation($dep_relation);
+				$this->createObject($dep_object);
 		}
 
 		array_pop($this->stack);
 
-		echo "Creating relation ", $relation->name, "\n";
-		// TOOD: actually execute the SQL
-		//SwatDB::exec($this->db, $relation->sql);
+		echo "Creating object ", $object->name, "\n";
+		SwatDB::exec($this->db, $object->sql);
 
-		$this->processed_relations[] = $relation->name;
+		$this->processed_objects[] = $object->name;
 	}
 
 	// }}}
@@ -143,12 +94,12 @@ class CreationProcess
 	}
 
 	// }}}
-	// {{{ private function findRelation()
+	// {{{ private function findObject()
 
-	private function findRelation($name)
+	private function findObject($name)
 	{
-		if (isset($this->relations[$name]))
-			return $this->relations[$name];
+		if (isset($this->objects[$name]))
+			return $this->objects[$name];
 
 		return null;
 	}
