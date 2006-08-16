@@ -1,14 +1,14 @@
 <?php
 
-require_once 'Creation/CreationRelation.php';
+require_once 'Creation/CreationObject.php';
 
-class CreationView extends CreationRelation
+class CreationView extends CreationObject
 {
 	// {{{ protected function parseName()
 
 	protected function parseName()
 	{
-		$regexp = '/create( or replace)? view ([a-zA-Z0-9]+)/ui';
+		$regexp = '/create(\s+or\s+replace)?\s+view\s+([a-zA-Z0-9_]+)/ui';
 		preg_match($regexp, $this->sql, $matches);
 
 		return $matches[2];
@@ -19,7 +19,7 @@ class CreationView extends CreationRelation
 
 	protected function parseDeps()
 	{
-		$regexp = '/(from|join) ([a-zA-Z0-9]+)/ui';
+		$regexp = '/(from|join)\s+([a-zA-Z0-9_]+)/ui';
 		preg_match_all($regexp, $this->sql, $matches);
 
 		return $matches[2];
