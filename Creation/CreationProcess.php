@@ -23,7 +23,7 @@ class CreationProcess
 		$this->connectDB();
 
 		foreach ($this->objects as $object)
-			$this->createObject($object);
+			$this->runMethod($object, 'create', array($this->db));
 	}
 
 	// }}}
@@ -39,9 +39,9 @@ class CreationProcess
 	}
 
 	// }}}
-	// {{{ private function createObject()
+	// {{{ private function runMethod()
 
-	private function createObject(CreationObject $object)
+	private function runMethod(CreationObject $object, $method, $args = array())
 	{
 		if (in_array($object->name, $this->processed_objects))
 			return;
@@ -62,14 +62,11 @@ class CreationProcess
 			if ($dep_object === null)
 				printf("Warning: dependent object '$dep' not found, skipping\n");
 			else
-				$this->createObject($dep_object);
+				$this->runMethod($dep_object, $method, $args);
 		}
 
+		call_user_func_array(array($object, $method), $args);
 		array_pop($this->stack);
-
-		echo "Creating object ", $object->name, "\n";
-		SwatDB::exec($this->db, $object->sql);
-
 		$this->processed_objects[] = $object->name;
 	}
 
