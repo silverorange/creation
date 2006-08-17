@@ -23,6 +23,24 @@ abstract class CreationObject
 	}
 
 	// }}}
+	// {{{ public function create()
+
+	public function create($db)
+	{
+		echo "Creating object ", $this->name, "\n";
+		SwatDB::exec($db, $this->sql);
+	}
+
+	// }}}
+	// {{{ public function drop()
+
+	public function drop($db)
+	{
+		echo "Dropping object ", $this->name, "\n";
+		//SwatDB::exec($db, $this->sql);
+	}
+
+	// }}}
 	// {{{ public static function cleanSql()
 
 	public static function cleanSql($sql)
