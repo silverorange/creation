@@ -78,7 +78,7 @@ class CreationFile
 					$new_statement = true;
 				}
 
-				if ($token == "'")
+				if ($token == "'" && $token == '$$')
 					$in_string = !$in_string;
 			}
 
