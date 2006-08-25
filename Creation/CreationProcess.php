@@ -34,7 +34,10 @@ class CreationProcess
 		echo "Adding file ", $filename, "\n";
 		$file = new CreationFile($filename);
 		$objects = $file->getObjects();
-		echo '    ', implode(', ', array_keys($objects)), "\n";
+
+		foreach (array_keys($objects) as $object)
+			echo '    '.$object. "\n";
+			
 		$this->objects = array_merge($this->objects, $objects);
 	}
 
