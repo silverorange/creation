@@ -58,6 +58,7 @@ class CreationFile
 	{
 		$lines = explode("\n", $sql);
 
+		$in_function_string = false;
 		$in_string = false;
 		$new_statement = false;
 		$current_statement = null;
@@ -71,15 +72,20 @@ class CreationFile
 
 			foreach ($tokens as $token) {
 				// check for new create statement
-				if ($token == 'create' && $in_string === false) {
+				if ($token == 'create' && $in_string === false &&
+					$in_function_string === false) {
+
 					if ($current_statement !== null)
 						$create_statements[] = $current_statement;
 
 					$new_statement = true;
 				}
 
-				if ($token == "'" || $token == '$$')
+				if ($token == "'")
 					$in_string = !$in_string;
+
+				if ($token == '$$')
+					$in_function_string = !$in_function_string;
 			}
 
 			if ($new_statement)
