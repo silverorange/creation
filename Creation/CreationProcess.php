@@ -57,6 +57,26 @@ class CreationProcess
 	}
 
 	// }}}
+	// {{{ protected function connectDB()
+
+	protected function connectDB()
+	{
+		printf("Connecting to DB (%s)... ", $this->dsn);
+
+		if ($this->dsn === null)
+			throw new SwatException('No DSN specified.');
+
+		$this->db = MDB2::connect($this->dsn);
+
+		if (PEAR::isError($this->db))
+			throw new SwatDBException($this->db);
+
+		$this->db->options['result_buffering'] = false;
+
+		echo "success\n";
+	}
+
+	// }}}
 	// {{{ private function runMethod()
 
 	private function runMethod(CreationObject $object, $method, $args = array())
@@ -86,26 +106,6 @@ class CreationProcess
 		call_user_func_array(array($object, $method), $args);
 		array_pop($this->stack);
 		$this->processed_objects[] = $object->name;
-	}
-
-	// }}}
-	// {{{ protected function connectDB()
-
-	protected function connectDB()
-	{
-		printf("Connecting to DB (%s)... ", $this->dsn);
-
-		if ($this->dsn === null)
-			throw new SwatException('No DSN specified.');
-
-		$this->db = MDB2::connect($this->dsn);
-
-		if (PEAR::isError($this->db))
-			throw new SwatDBException($this->db);
-
-		$this->db->options['result_buffering'] = false;
-
-		echo "success\n";
 	}
 
 	// }}}
