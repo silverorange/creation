@@ -58,7 +58,7 @@ class CreationFile
 	 *
 	 * @param string $sql the SQL to parse.
 	 *
-	 * @return array the array of create statements parsed from the givne SQL.
+	 * @return array the array of create statements parsed from the given SQL.
 	 */
 	private function parseCreateStatements($sql)
 	{
