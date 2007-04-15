@@ -56,7 +56,7 @@ class CreationFile
 	/**
 	 * Parses create statements out of a block of SQL
 	 *
-	 * @param string $sql ithe SQL to parse.
+	 * @param string $sql the SQL to parse.
 	 *
 	 * @return array the array of create statements parsed from the givne SQL.
 	 */
