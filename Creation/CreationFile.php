@@ -7,6 +7,12 @@ require_once 'Creation/CreationTrigger.php';
 require_once 'Creation/CreationIndex.php';
 require_once 'Creation/CreationType.php';
 
+/** 
+ * Parses creation statements from an SQL file
+ *
+ * @package   Creation
+ * @copyright 2006 silverorange
+ */
 class CreationFile
 {
 	// {{{ private properties

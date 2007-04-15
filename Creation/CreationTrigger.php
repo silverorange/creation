@@ -2,6 +2,12 @@
 
 require_once 'Creation/CreationObject.php';
 
+/**
+ * Parses a CREATE TRIGGER statement
+ *
+ * @package   Creation
+ * @copyright 2006 silverorange
+ */ 
 class CreationTrigger extends CreationObject
 {
 	// {{{ protected function parseName()

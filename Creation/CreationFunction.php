@@ -2,6 +2,12 @@
 
 require_once 'Creation/CreationObject.php';
 
+/**
+ * Parses a CREATE FUNCTION statement
+ *
+ * @package   Creation
+ * @copyright 2006 silverorange
+ */ 
 class CreationFunction extends CreationObject
 {
 	// {{{ protected function parseName()

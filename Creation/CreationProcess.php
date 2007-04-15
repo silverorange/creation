@@ -7,15 +7,30 @@ require_once 'SwatDB/exceptions/SwatDBException.php';
 require_once 'Swat/exceptions/SwatException.php';
 require_once 'Creation/CreationFile.php';
 
+/**
+ * Runnable application that processes a list of SQL files and outputs
+ * all SQL CREATE statements in the correct order
+ *
+ * If circular dependencies are encountered, an exception is thrown.
+ *
+ * @package   Creation
+ * @copyright 2006 silverorange
+ */
 class CreationProcess
 {
+	// {{{ public properties
+
 	public $dsn = null;
 	public $db = null;
+
+	// }}}
+	// {{{ private properties
 
 	private $objects = array();
 	private $processed_objects = array();
 	private $stack = array();
 
+	// }}}
 	// {{{ public function run()
 
 	public function run()
