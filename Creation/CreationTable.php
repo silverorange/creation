@@ -2,6 +2,12 @@
 
 require_once 'Creation/CreationObject.php';
 
+/**
+ * Parses a CREATE TABLE statement
+ *
+ * @package   Creation
+ * @copyright 2006 silverorange
+ */ 
 class CreationTable extends CreationObject
 {
 	// {{{ protected function parseName()

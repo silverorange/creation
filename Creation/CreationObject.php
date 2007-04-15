@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Abstract base class for parsing a CREATE statement
+ *
+ * @package   Creation
+ * @copyright 2006 silverorange
+ */ 
 abstract class CreationObject
 {
 	// {{{ public properties

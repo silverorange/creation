@@ -2,6 +2,12 @@
 
 require_once 'Creation/CreationObject.php';
 
+/**
+ * Parses a CREATE INDEX statement
+ *
+ * @package   Creation
+ * @copyright 2006 silverorange
+ */ 
 class CreationIndex extends CreationObject
 {
 	// {{{ protected function parseName()
