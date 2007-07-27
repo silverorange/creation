@@ -6,6 +6,8 @@ require_once 'Creation/CreationFunction.php';
 require_once 'Creation/CreationTrigger.php';
 require_once 'Creation/CreationIndex.php';
 require_once 'Creation/CreationType.php';
+require_once 'Creation/CreationInsert.php';
+require_once 'Creation/CreationSelect.php';
 
 /** 
  * Parses creation statements from an SQL file
@@ -26,9 +28,9 @@ class CreationFile
 	{
 		$sql = file_get_contents($filename);
 		$sql = self::cleanSql($sql);
-		$create_statements = $this->parseCreateStatements($sql);
+		$statements = $this->parseStatements($sql);
 
-		foreach ($create_statements as $statement) {
+		foreach ($statements as $statement) {
 			$object = $this->parseObject($statement);
 
 			if ($object !== null)
@@ -51,16 +53,16 @@ class CreationFile
 	}
 
 	// }}}
-	// {{{ private function parseCreateStatements()
+	// {{{ private function parseStatements()
 
 	/**
-	 * Parses create statements out of a block of SQL
+	 * Parses statements out of a block of SQL
 	 *
 	 * @param string $sql the SQL to parse.
 	 *
-	 * @return array the array of create statements parsed from the given SQL.
+	 * @return array the array of statements parsed from the given SQL.
 	 */
-	private function parseCreateStatements($sql)
+	private function parseStatements($sql)
 	{
 		$lines = explode("\n", $sql);
 
@@ -68,7 +70,7 @@ class CreationFile
 		$in_string = false;
 		$new_statement = false;
 		$current_statement = null;
-		$create_statements = array();
+		$statements = array();
 
 		foreach ($lines as $line) {
 			$new_statement = false;
@@ -77,12 +79,12 @@ class CreationFile
 				PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 
 			foreach ($tokens as $token) {
-				// check for new create statement
+				// check for new statement
 				if ($token == 'create' && $in_string === false &&
 					$in_function_string === false) {
 
 					if ($current_statement !== null)
-						$create_statements[] = $current_statement;
+						$statements[] = $current_statement;
 
 					$new_statement = true;
 				}
@@ -100,9 +102,12 @@ class CreationFile
 				$current_statement.= $line."\n";
 		}
 
-		$create_statements[] = $current_statement;
+		$statements[] = $current_statement;
 
-		return $create_statements;
+		foreach ($statements as $statement)
+			echo "\n----- parsed statement -----------\n", $statement, "\n-----------------\n";
+
+		return $statements;
 	}
 
 	// }}}
@@ -137,6 +142,10 @@ class CreationFile
 				print_r($matches);
 				exit;
 			}
+		} elseif (preg_match('/insert into/ui', $sql, $matches)) {
+			$object = new CreationInsert($sql);
+		} elseif (preg_match('/select /ui', $sql, $matches)) {
+			$object = new CreationSelect($sql);
 		} else {
 			echo "Could not create an object for:\n", $sql;
 			exit;
