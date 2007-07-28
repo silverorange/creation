@@ -67,45 +67,128 @@ class CreationFile
 		$lines = explode("\n", $sql);
 
 		$in_function_string = false;
+
 		$in_string = false;
-		$new_statement = false;
-		$current_statement = null;
+		$string_type = null;
+
+		$in_comment = false;
+		$in_inline_comment = false;
+
+		$statement = '';
 		$statements = array();
 
-		foreach ($lines as $line) {
-			$new_statement = false;
+		$token_expression = '/(\/\*|\*\/|--|\$\$|;|\'|")/ui';
 
-			$tokens = preg_split('/\s+/i', strtolower($line), -1,
+		foreach ($lines as $line) {
+			// new line always ends an inline comment
+			$in_inline_comment = false;
+
+			$tokens = preg_split($token_expression, $line, -1,
 				PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 
 			foreach ($tokens as $token) {
-				// check for new statement
-				if ($token == 'create' && $in_string === false &&
-					$in_function_string === false) {
+				switch ($token) {
+				case '/*':
+					if (!$in_comment) {
+						if (!$in_string) {
+							$in_comment = true;
+						} else {
+							if (!$in_inline_comment) {
+								$statement.= $token;
+							}
+						}
+					}
+					break;
 
-					if ($current_statement !== null)
-						$statements[] = $current_statement;
+				case '*/':
+					if (!$in_string) {
+						if ($in_comment) {
+							$in_comment = false;
+						} else {
+							echo 'Unopened closing comment detected: ',
+								$line, "\n";
 
-					$new_statement = true;
+							exit(1);
+						}
+					} else {
+						if (!$in_inline_comment) {
+							$statement.= $token;
+						}
+					}
+
+					break;
+
+				case '--':
+					if (!$in_string) {
+						$in_inline_comment = true;
+					} else {
+						if (!$in_comment) {
+							$statement.= $token;
+						}
+					}
+					break;
+
+				case '$$':
+					if (!$in_comment && !$in_inline_comment) {
+						if (!$in_string) {
+							$in_function_string = !$in_function_string;
+						}
+						$statement.= $token;
+					}
+					break;
+
+				case ';':
+					if (!$in_comment && !$in_inline_comment) {
+						$statement.= $token;
+						if (!$in_string && !$in_function_string) {
+							$statements[] = trim($statement);
+							$statement = '';
+						}
+					}
+					break;
+
+				case '"':
+					// TODO: this will catch \"
+					if (!$in_comment && !$in_inline_comment) {
+						if ($in_string) {
+							if ($string_type == '"') {
+								$in_string = false;
+							}
+						} else {
+							$in_string = true;
+							$string_type = '"';
+						}
+						$statement.= $token;
+					}
+					break;
+
+				case "'":
+					// TODO: this will catch \'
+					if (!$in_comment && !$in_inline_comment) {
+						if ($in_string) {
+							if ($string_type == "'") {
+								$in_string = false;
+							}
+						} else {
+							$in_string = true;
+							$string_type = "'";
+						}
+						$statement.= $token;
+					}
+					break;
+
+				default:
+					if (!$in_comment && !$in_inline_comment) {
+						$statement.= $token;
+					}
+					break;
 				}
-
-				if ($token == "'")
-					$in_string = !$in_string;
-
-				if ($token == '$$')
-					$in_function_string = !$in_function_string;
 			}
 
-			if ($new_statement)
-				$current_statement = $line."\n";
-			elseif ($current_statement !== null)
-				$current_statement.= $line."\n";
+			if (!$in_comment) {
+				$statement.= "\n";
+			}
 		}
-
-		$statements[] = $current_statement;
-
-		foreach ($statements as $statement)
-			echo "\n----- parsed statement -----------\n", $statement, "\n-----------------\n";
 
 		return $statements;
 	}
