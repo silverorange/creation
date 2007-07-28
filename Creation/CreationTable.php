@@ -25,7 +25,7 @@ class CreationTable extends CreationObject
 
 	protected function parseDeps()
 	{
-		$regexp = '/references\s+([a-zA-Z0-9_]+)\(/ui';
+		$regexp = '/references\s+([a-zA-Z0-9_]+)\s*\(/ui';
 		preg_match_all($regexp, $this->sql, $matches);
 
 		return $matches[1];
