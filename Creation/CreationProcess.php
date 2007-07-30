@@ -37,6 +37,26 @@ class CreationProcess
 	{
 		$this->connectDB();
 
+		// if table A depends on table B, make any inserts to table A depend on
+		// insert to table B.
+		foreach ($this->getObjectsByType('CreationInsert') as $insert) {
+			$dep_table = $this->findObject($insert->deps[0]);
+			foreach ($dep_table->deps as $dep) {
+				foreach ($this->getObjectsByType('CreationInsert') as $other_insert) {
+					if ($dep === $other_insert->deps[0])
+						$insert->deps[] = $other_insert->name;
+				}
+			}
+		}
+		
+		// make selects on table A depend on inserts to table A
+		foreach ($this->getObjectsByType('CreationSelect') as $select) {
+			foreach ($this->getObjectsByType('CreationInsert') as $insert) {
+				if ($select->deps[0] = $insert->deps[0])
+					$select->deps[] = $insert->name;
+			}
+		}
+
 		foreach ($this->objects as $object)
 			$this->runMethod($object, 'create', array($this->db));
 	}
@@ -117,6 +137,20 @@ class CreationProcess
 			return $this->objects[$name];
 
 		return null;
+	}
+
+	// }}}
+	// {{{ private function getObjectsByType()
+
+	private function getObjectsByType($type)
+	{
+		$objects = array();
+
+		foreach ($this->objects as $object)
+			if ($object instanceof $type)
+				$objects[] = $object;
+
+		return $objects;
 	}
 
 	// }}}
