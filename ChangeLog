@@ -1,0 +1,96 @@
+2007-07-30  nrf
+
+	* [r18846] creation/trunk/Creation/CreationProcess.php:
+	  Setup complete depencies for inserts and selects.
+
+2007-07-28  gauthierm
+
+	* [r18799] creation/trunk/Creation/CreationFile.php:
+	  Ticket #1138: Fix parsing of SQL statements. This parser is not
+	  perfect (see TODOs) but is much better than the old one.
+	* [r18798] creation/trunk/Creation/CreationTable.php:
+	  Fix ticket #1135: creating package needs to be more forgiving of
+	  SQL syntax.
+
+2007-07-27  nrf
+
+	* [r18796] creation/trunk/Creation/CreationFile.php,
+	  creation/trunk/Creation/CreationInsert.php,
+	  creation/trunk/Creation/CreationSelect.php:
+	  Parse select and insert statements in addition to create
+	  statements.
+
+2007-04-15  gauthierm
+
+	* [r16846] creation/trunk/Creation/CreationFile.php:
+	  fix another typo
+	* [r16845] creation/trunk/Creation/CreationFile.php:
+	  fix typo
+	* [r16844] creation/trunk/Creation/CreationProcess.php:
+	  private after protected
+	* [r16843] creation/trunk/Creation/CreationFile.php,
+	  creation/trunk/Creation/CreationFunction.php,
+	  creation/trunk/Creation/CreationIndex.php,
+	  creation/trunk/Creation/CreationObject.php,
+	  creation/trunk/Creation/CreationProcess.php,
+	  creation/trunk/Creation/CreationTable.php,
+	  creation/trunk/Creation/CreationTrigger.php,
+	  creation/trunk/Creation/CreationType.php,
+	  creation/trunk/Creation/CreationView.php:
+	  Add class-level docblocks to creation package classes.
+
+2006-11-09  gauthierm
+
+	* [r12806] creation/trunk/Creation/CreationFile.php:
+	  keep track of single quotes and function quotes separately
+
+2006-08-25  dave
+
+	* [r10242] creation/trunk/Creation/CreationProcess.php:
+	  pretty up the output a bit
+
+2006-08-22  gauthierm
+
+	* [r10056] creation/trunk/Creation/CreationFile.php:
+	  oops
+	* [r10055] creation/trunk/Creation/CreationFile.php:
+	  parse PostgreSQL 8.x style function definitions.
+
+2006-08-17  nrf
+
+	* [r9812] creation/trunk/Creation/CreationObject.php:
+	  Missed in an earlier commit.
+
+2006-08-16  nrf
+
+	* [r9735] creation/trunk/Creation/CreationProcess.php:
+	  Robustify... doesn't real do anything different yet
+	* [r9723] creation/trunk/Creation/CreationTrigger.php:
+	  name triggers uniquely
+	* [r9710] creation/trunk/Creation/CreationFile.php,
+	  creation/trunk/Creation/CreationIndex.php,
+	  creation/trunk/Creation/CreationType.php:
+	  Add missing files.
+	* [r9706] creation/trunk/Creation/CreationFunction.php,
+	  creation/trunk/Creation/CreationObject.php,
+	  creation/trunk/Creation/CreationProcess.php,
+	  creation/trunk/Creation/CreationRelation.php,
+	  creation/trunk/Creation/CreationTable.php,
+	  creation/trunk/Creation/CreationTrigger.php,
+	  creation/trunk/Creation/CreationView.php:
+	  Working Creation package with better parsing thanks to mike.
+	* [r9687] creation/trunk/Creation,
+	  creation/trunk/Creation/CreationFunction.php,
+	  creation/trunk/Creation/CreationProcess.php,
+	  creation/trunk/Creation/CreationRelation.php,
+	  creation/trunk/Creation/CreationTable.php,
+	  creation/trunk/Creation/CreationTrigger.php,
+	  creation/trunk/Creation/CreationView.php:
+	  New package Creation to create a database from SQL files. All
+	  dependencies are parsed directly from the SQL.
+
+2006-08-15  nrf
+
+	* [r9677] creation/trunk:
+	  new dir
+
