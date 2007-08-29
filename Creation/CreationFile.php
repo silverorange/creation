@@ -8,6 +8,7 @@ require_once 'Creation/CreationIndex.php';
 require_once 'Creation/CreationType.php';
 require_once 'Creation/CreationInsert.php';
 require_once 'Creation/CreationSelect.php';
+require_once 'Creation/CreationAlter.php';
 
 /** 
  * Parses creation statements from an SQL file
@@ -229,6 +230,8 @@ class CreationFile
 			$object = new CreationInsert($sql);
 		} elseif (preg_match('/select /ui', $sql, $matches)) {
 			$object = new CreationSelect($sql);
+		} elseif (preg_match('/alter table/ui', $sql, $matches)) {
+			$object = new CreationAlter($sql);
 		} else {
 			echo "Could not create an object for:\n", $sql;
 			exit;
