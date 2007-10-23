@@ -191,6 +191,9 @@ class CreationFile
 			}
 		}
 
+		if (!$in_comment && !$in_inline_comment)
+			$statements[] = trim($statement);
+
 		return $statements;
 	}
 
