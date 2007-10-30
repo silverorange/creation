@@ -10,7 +10,7 @@ require_once 'Creation/CreationInsert.php';
 require_once 'Creation/CreationSelect.php';
 require_once 'Creation/CreationAlter.php';
 
-/** 
+/**
  * Parses creation statements from an SQL file
  *
  * @package   Creation
@@ -37,6 +37,14 @@ class CreationFile
 			if ($object !== null)
 				$this->objects[$object->name] = $object;
 		}
+	}
+
+	// }}}
+	// {{{ public function getObjects()
+
+	public function getObjects()
+	{
+		return $this->objects;
 	}
 
 	// }}}
@@ -238,14 +246,6 @@ class CreationFile
 		}
 
 		return $object;
-	}
-
-	// }}}
-	// {{{ public function getObjects()
-
-	public function getObjects()
-	{
-		return $this->objects;
 	}
 
 	// }}}
