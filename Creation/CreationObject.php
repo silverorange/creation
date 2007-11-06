@@ -5,7 +5,7 @@
  *
  * @package   Creation
  * @copyright 2006 silverorange
- */ 
+ */
 abstract class CreationObject
 {
 	// {{{ public properties

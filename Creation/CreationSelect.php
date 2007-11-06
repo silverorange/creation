@@ -7,7 +7,7 @@ require_once 'Creation/CreationObject.php';
  *
  * @package   Creation
  * @copyright 2007 silverorange
- */ 
+ */
 class CreationSelect extends CreationObject
 {
 	// {{{ protected function parseName()
