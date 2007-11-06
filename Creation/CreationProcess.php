@@ -48,7 +48,7 @@ class CreationProcess
 				}
 			}
 		}
-		
+
 		// make selects on table A depend on inserts to table A
 		foreach ($this->getObjectsByType('CreationSelect') as $select) {
 			foreach ($this->getObjectsByType('CreationInsert') as $insert) {
