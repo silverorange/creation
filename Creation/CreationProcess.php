@@ -72,7 +72,7 @@ class CreationProcess
 
 		foreach (array_keys($objects) as $object)
 			echo '    '.$object. "\n";
-			
+
 		$this->objects = array_merge($this->objects, $objects);
 	}
 
