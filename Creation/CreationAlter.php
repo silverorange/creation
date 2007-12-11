@@ -22,10 +22,17 @@ class CreationAlter extends CreationObject
 
 	protected function parseDeps()
 	{
+		$deps = array();
+
 		$regexp = '/alter\s+table\s+([a-zA-Z0-9_]+)/ui';
 		preg_match($regexp, $this->sql, $matches);
+		$deps[] = $matches[1];
 
-		return array($matches[1]);
+		$regexp = '/references\s+([a-zA-Z0-9_]+)\s*\(/ui';
+		if (preg_match($regexp, $this->sql, $matches))
+			$deps[] = $matches[1];
+
+		return $deps;
 	}
 
 	// }}}
