@@ -29,6 +29,31 @@ class CreationProcess
 	private $objects = array();
 	private $processed_objects = array();
 	private $stack = array();
+	private $dbtypes = array(
+		'mysqli' => 'mysql',
+		'mysql'  => 'mysql',
+		'pgsql'  => 'pgsql',
+	);
+
+	/*
+	 * The type of database currently in use
+	 *
+	 * @var string
+	 */
+	private $dbtype;
+
+	// }}}
+	// {{{ public function __construct()
+
+	public function __construct($dsn = null)
+	{
+		$this->dsn = $dsn;
+
+		if ($this->dsn !== null) {
+			$dsn_info = MDB2::parseDSN($this->dsn);
+			$this->dbtype = $this->dbtypes[$dsn_info['phptype']];
+		}
+	}
 
 	// }}}
 	// {{{ public function run()
@@ -66,14 +91,24 @@ class CreationProcess
 
 	public function addFile($filename)
 	{
-		echo "Adding file ", $filename, "\n";
-		$file = new CreationFile($filename);
-		$objects = $file->getObjects();
+		if ($this->dbtype === null) {
+			$dsn_info = MDB2::parseDSN($this->dsn);
+			$this->dbtype = $this->dbtypes[$dsn_info['phptype']];
+		}
 
-		foreach (array_keys($objects) as $object)
-			echo '    '.$object. "\n";
+		// use only the files with the specific extension and the generic files
+		if ((strpos($filename, $this->dbtype.'.sql') !== false) ||
+			preg_match('/\/([a-zA-Z0-9_]+)\.sql/ui', $filename)) {
 
-		$this->objects = array_merge($this->objects, $objects);
+			echo "Adding file ", $filename, "\n";
+			$file = new CreationFile($filename);
+			$objects = $file->getObjects();
+
+			foreach (array_keys($objects) as $object)
+				echo '    '.$object. "\n";
+
+			$this->objects = array_merge($this->objects, $objects);
+		}
 	}
 
 	// }}}

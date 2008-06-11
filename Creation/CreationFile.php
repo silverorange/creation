@@ -3,6 +3,7 @@
 require_once 'Creation/CreationTable.php';
 require_once 'Creation/CreationView.php';
 require_once 'Creation/CreationFunction.php';
+require_once 'Creation/CreationProcedure.php';
 require_once 'Creation/CreationTrigger.php';
 require_once 'Creation/CreationIndex.php';
 require_once 'Creation/CreationType.php';
@@ -76,6 +77,7 @@ class CreationFile
 		$lines = explode("\n", $sql);
 
 		$in_function_string = false;
+		$in_function_definition = false;
 
 		$in_string = false;
 		$string_type = null;
@@ -86,7 +88,9 @@ class CreationFile
 		$statement = '';
 		$statements = array();
 
-		$token_expression = '/(\/\*|\*\/|--|\$\$|;|\'|")/ui';
+		$compound_depth = 0;
+
+		$token_expression = '/(\/\*|\*\/|--|\$\$|;|\'|"|BEGIN|END;)/ui';
 
 		foreach ($lines as $line) {
 			// new line always ends an inline comment
@@ -96,7 +100,7 @@ class CreationFile
 				PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 
 			foreach ($tokens as $token) {
-				switch ($token) {
+				switch (strtoupper($token)) {
 				case '/*':
 					if (!$in_comment) {
 						if (!$in_string) {
@@ -146,10 +150,36 @@ class CreationFile
 					}
 					break;
 
-				case ';':
+				case 'BEGIN':
 					if (!$in_comment && !$in_inline_comment) {
 						$statement.= $token;
 						if (!$in_string && !$in_function_string) {
+							$compound_depth++;
+							$in_function_definition = true;
+						}
+					}
+					break;
+
+				case 'END;':
+					if (!$in_comment && !$in_inline_comment) {
+						$statement.= $token;
+						if (!$in_string && $compound_depth == 1 &&
+							!$in_function_string) {
+							$compound_depth--;
+							$in_function_definition = false;
+							$statements[] = trim($statement);
+							$statement = '';
+						} else {
+							$compound_depth--;
+						}
+					}
+					break;
+
+				case ';':
+					if (!$in_comment && !$in_inline_comment) {
+						$statement.= $token;
+						if (!$in_string && !$in_function_string &&
+							!$in_function_definition) {
 							$statements[] = trim($statement);
 							$statement = '';
 						}
@@ -214,7 +244,7 @@ class CreationFile
 	// {{{ private function parseObject()
 
 	private function parseObject($sql) {
-		$regexp = '/create( or replace)? (table|view|function|trigger|index|type)/ui';
+		$regexp = '/create( or replace)? (table|view|function|trigger|index|type|procedure)/ui';
 
 		if (preg_match($regexp, $sql, $matches)) {
 			$type =  strtolower($matches[2]);
@@ -237,6 +267,9 @@ class CreationFile
 				break;
 			case 'type':
 				$object = new CreationType($sql);
+				break;
+			case 'procedure':
+				$object = new CreationProcedure($sql);
 				break;
 			default:
 				print_r($matches);
