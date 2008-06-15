@@ -96,7 +96,7 @@ class CreationProcess
 			$this->db_type = $this->db_types[$dsn_info['phptype']];
 		}
 
-		$pattern = '/^[^\.]+(\.'.$this->db_type.')?\.sql$/';
+		$pattern = '/^\.?[^\.]+(\.'.$this->db_type.')?\.sql$/';
 		// use only the files with the specific extension and the generic files
 		if (preg_match($pattern, $filename)) {
 			echo "Adding file ", $filename, "\n";
