@@ -29,7 +29,7 @@ class CreationProcess
 	private $objects = array();
 	private $processed_objects = array();
 	private $stack = array();
-	private $dbtypes = array(
+	private $db_types = array(
 		'mysqli' => 'mysql',
 		'mysql'  => 'mysql',
 		'pgsql'  => 'pgsql',
@@ -40,7 +40,7 @@ class CreationProcess
 	 *
 	 * @var string
 	 */
-	private $dbtype;
+	private $db_type;
 
 	// }}}
 	// {{{ public function __construct()
@@ -51,7 +51,7 @@ class CreationProcess
 
 		if ($this->dsn !== null) {
 			$dsn_info = MDB2::parseDSN($this->dsn);
-			$this->dbtype = $this->dbtypes[$dsn_info['phptype']];
+			$this->db_type = $this->db_types[$dsn_info['phptype']];
 		}
 	}
 
@@ -91,14 +91,14 @@ class CreationProcess
 
 	public function addFile($filename)
 	{
-		if ($this->dbtype === null) {
+		if ($this->db_type === null) {
 			$dsn_info = MDB2::parseDSN($this->dsn);
-			$this->dbtype = $this->dbtypes[$dsn_info['phptype']];
+			$this->db_type = $this->db_types[$dsn_info['phptype']];
 		}
 
-		$regex = '/^(?:[^.]+|.+?\.'.$this->dbtype.')\.sql$/';
+		$pattern = '/^[^\.]+(\.'.$this->db_type.')?\.sql$/';
 		// use only the files with the specific extension and the generic files
-		if (preg_match($regex, $filename)) {
+		if (preg_match($pattern, $filename)) {
 			echo "Adding file ", $filename, "\n";
 			$file = new CreationFile($filename);
 			$objects = $file->getObjects();
