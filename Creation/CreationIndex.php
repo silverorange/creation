@@ -14,7 +14,7 @@ class CreationIndex extends CreationObject
 
 	protected function parseName()
 	{
-		$regexp = '/create\s+index\s+([a-zA-Z0-9_]+)/ui';
+		$regexp = '/create\s+(?:unique\s+)?index\s+([a-zA-Z0-9_]+)/ui';
 		preg_match($regexp, $this->sql, $matches);
 
 		return $matches[1];

@@ -244,7 +244,7 @@ class CreationFile
 	// {{{ private function parseObject()
 
 	private function parseObject($sql) {
-		$regexp = '/create( or replace)? (table|view|function|trigger|index|type|procedure)/ui';
+		$regexp = '/create( or replace| unique)? (table|view|function|trigger|index|type|procedure)/ui';
 
 		if (preg_match($regexp, $sql, $matches)) {
 			$type =  strtolower($matches[2]);
