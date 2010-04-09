@@ -32,6 +32,7 @@ class CreationProcess
 	private $db_types = array(
 		'mysqli' => 'mysql',
 		'mysql'  => 'mysql',
+		'mssql'  => 'mssql',
 		'pgsql'  => 'pgsql',
 	);
 
