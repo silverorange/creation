@@ -6,7 +6,7 @@ require_once 'Creation/CreationObject.php';
  * Parses a CREATE TRIGGER statement
  *
  * @package   Creation
- * @copyright 2006 silverorange
+ * @copyright 2006-2010 silverorange
  */
 class CreationTrigger extends CreationObject
 {
@@ -14,10 +14,19 @@ class CreationTrigger extends CreationObject
 
 	protected function parseName()
 	{
+		// pgsql and mysql trigger syntax
 		$regexp = '/create\s+trigger\s+([a-zA-Z0-9_]+)\s+.*\s+on\s+([a-zA-Z0-9_]+)/ui';
-		preg_match($regexp, $this->sql, $matches);
+		if (preg_match($regexp, $this->sql, $matches) === 1) {
+			$name = $matches[2].'__'.$matches[1];
+		}
 
-		return $matches[2].'__'.$matches[1];
+		// mssql trigger syntax
+		$regexp = '/create\s+trigger\s+([a-zA-Z0-9_]+)\s+on\s+([a-zA-Z0-9_]+)\s+.*\s+as/ui';
+		if (preg_match($regexp, $this->sql, $matches) === 1) {
+			$name = $matches[2].'__'.$matches[1];
+		}
+
+		return $name;
 	}
 
 	// }}}
@@ -25,10 +34,21 @@ class CreationTrigger extends CreationObject
 
 	protected function parseDeps()
 	{
-		$regexp = '/create\s+trigger\s+([a-zA-Z0-9_]+).* on\s+([a-zA-Z0-9_]+)/ui';
-		preg_match_all($regexp, $this->sql, $matches);
+		$deps = array();
 
-		return $matches[2];
+		// pgsql and mysql trigger syntax
+		$regexp = '/create\s+trigger\s+([a-zA-Z0-9_]+).* on\s+([a-zA-Z0-9_]+)/ui';
+		if (preg_match_all($regexp, $this->sql, $matches) === 1) {
+			$deps = array($matches[2]);
+		}
+
+		// mssql trigger syntax
+		$regexp = '/create\s+trigger\s+([a-zA-Z0-9_]+)\s+on\s+([a-zA-Z0-9_]+)\s+.*\s+as/ui';
+		if (preg_match($regexp, $this->sql, $matches) === 1) {
+			$deps = array($matches[2]);
+		}
+
+		return $deps;
 	}
 
 	// }}}
