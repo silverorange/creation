@@ -34,6 +34,7 @@ class CreationFile
 
 		foreach ($statements as $statement) {
 			$object = $this->parseObject($statement);
+			$object->filename = $filename;
 
 			if ($object !== null)
 				$this->objects[$object->name] = $object;

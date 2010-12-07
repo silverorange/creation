@@ -13,6 +13,7 @@ abstract class CreationObject
 	public $name;
 	public $sql;
 	public $deps;
+	public $filename;
 
 	// }}}
 	// {{{ public function __construct()
@@ -34,6 +35,7 @@ abstract class CreationObject
 	public function create($db)
 	{
 		echo "Creating object ", $this->name, "\n";
+		echo "\tfrom ", $this->filename, "\n";
 		SwatDB::exec($db, $this->sql);
 	}
 
