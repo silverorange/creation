@@ -25,7 +25,7 @@ class CreationIndex extends CreationObject
 
 	protected function parseDeps()
 	{
-		$regexp = '/on\s+([a-zA-Z0-9_]+)/ui';
+		$regexp = '/\son\s+([a-zA-Z0-9_]+)/ui';
 		preg_match_all($regexp, $this->sql, $matches);
 
 		return $matches[1];
