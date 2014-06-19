@@ -68,9 +68,11 @@ class CreationProcess
 		foreach ($this->getObjectsByType('CreationInsert') as $insert) {
 			$dep_table = $this->findObject($insert->deps[0]);
 			foreach ($dep_table->deps as $dep) {
-				foreach ($this->getObjectsByType('CreationInsert') as $other_insert) {
-					if ($dep === $other_insert->deps[0])
+				foreach ($this->getObjectsByType('CreationInsert') as
+					$other_insert) {
+					if ($dep === $other_insert->deps[0]) {
 						$insert->deps[] = $other_insert->name;
+					}
 				}
 			}
 		}
