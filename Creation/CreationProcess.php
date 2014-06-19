@@ -14,7 +14,7 @@ require_once 'Creation/CreationFile.php';
  * If circular dependencies are encountered, an exception is thrown.
  *
  * @package   Creation
- * @copyright 2006 silverorange
+ * @copyright 2006-2014 silverorange
  */
 class CreationProcess
 {
@@ -86,8 +86,18 @@ class CreationProcess
 			}
 		}
 
-		foreach ($this->objects as $object)
+		// make views depend on alter statements
+		foreach ($this->getObjectsByType('CreationView') as $view) {
+			foreach ($this->getObjectsByType('CreationAlter') as $alter) {
+				if ($view->deps[0] === $alter->deps[0]) {
+					$view->deps[] = $alter->name;
+				}
+			}
+		}
+
+		foreach ($this->objects as $object) {
 			$this->runMethod($object, 'create', array($this->db));
+		}
 	}
 
 	// }}}
