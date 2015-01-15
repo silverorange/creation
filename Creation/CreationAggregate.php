@@ -17,7 +17,7 @@ class CreationAggregate extends CreationObject
 		$regexp = '/create\s+aggregate\s+([a-zA-Z0-9_]+)\s*\(/ui';
 		preg_match($regexp, $this->sql, $matches);
 
-		return $matches[2];
+		return $matches[1];
 	}
 
 	// }}}
