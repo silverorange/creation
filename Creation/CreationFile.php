@@ -10,12 +10,13 @@ require_once 'Creation/CreationType.php';
 require_once 'Creation/CreationInsert.php';
 require_once 'Creation/CreationSelect.php';
 require_once 'Creation/CreationAlter.php';
+require_once 'Creation/CreationAggregate.php';
 
 /**
  * Parses creation statements from an SQL file
  *
  * @package   Creation
- * @copyright 2006 silverorange
+ * @copyright 2006-2015 silverorange
  */
 class CreationFile
 {
@@ -245,7 +246,19 @@ class CreationFile
 	// {{{ private function parseObject()
 
 	private function parseObject($sql) {
-		$regexp = '/create( or replace| unique)? (table|view|function|trigger|index|type|procedure)/ui';
+		$types = array(
+			'table',
+			'view',
+			'function',
+			'trigger',
+			'index',
+			'type',
+			'procedure',
+			'aggregate',
+		);
+
+		$types = implode('|', $types);
+		$regexp = '/create( or replace| unique)? ('.$types.')/ui';
 
 		if (preg_match($regexp, $sql, $matches)) {
 			$type =  strtolower($matches[2]);
@@ -271,6 +284,9 @@ class CreationFile
 				break;
 			case 'procedure':
 				$object = new CreationProcedure($sql);
+				break;
+			case 'aggregate':
+				$object = new CreationAggregate($sql);
 				break;
 			default:
 				print_r($matches);
