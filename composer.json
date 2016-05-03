@@ -32,7 +32,7 @@
 		"silverorange/swat": "^2.2.10"
 	},
 	"autoload": {
-		"file": [ "autoload.php" ]
+		"classmap": [ "Creation/" ]
 	},
 	"include-path": [
 		"./"
