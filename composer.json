@@ -33,8 +33,5 @@
 	},
 	"autoload": {
 		"classmap": [ "Creation/" ]
-	},
-	"include-path": [
-		"./"
-	]
+	}
 }
