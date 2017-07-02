@@ -1,12 +1,5 @@
 <?php
 
-require_once 'PEAR.php';
-require_once 'MDB2.php';
-require_once 'SwatDB/SwatDB.php';
-require_once 'SwatDB/exceptions/SwatDBException.php';
-require_once 'Swat/exceptions/SwatException.php';
-require_once 'Creation/CreationFile.php';
-
 /**
  * Runnable application that processes a list of SQL files and outputs
  * all SQL CREATE statements in the correct order

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Creation/CreationObject.php';
-
 /**
  * Parses an SELECT statement
  *
@@ -32,7 +30,6 @@ class CreationSelect extends CreationObject
 			if (preg_match($regexp, $table, $matches))
 				$deps[] = $matches[1];
 		}
-
 
 		return $deps;
 	}

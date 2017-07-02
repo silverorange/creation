@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Creation/CreationObject.php';
-
 /**
  * Parses a CREATE FUNCTION statement
  *

@@ -1,17 +1,5 @@
 <?php
 
-require_once 'Creation/CreationTable.php';
-require_once 'Creation/CreationView.php';
-require_once 'Creation/CreationFunction.php';
-require_once 'Creation/CreationProcedure.php';
-require_once 'Creation/CreationTrigger.php';
-require_once 'Creation/CreationIndex.php';
-require_once 'Creation/CreationType.php';
-require_once 'Creation/CreationInsert.php';
-require_once 'Creation/CreationSelect.php';
-require_once 'Creation/CreationAlter.php';
-require_once 'Creation/CreationAggregate.php';
-
 /**
  * Parses creation statements from an SQL file
  *
