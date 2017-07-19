@@ -245,7 +245,8 @@ class CreationFile
 	// }}}
 	// {{{ private function parseObject()
 
-	private function parseObject($sql) {
+	private function parseObject($sql)
+	{
 		$types = array(
 			'table',
 			'view',
@@ -261,7 +262,7 @@ class CreationFile
 		$regexp = '/create( or replace| unique)? ('.$types.')/ui';
 
 		if (preg_match($regexp, $sql, $matches)) {
-			$type =  strtolower($matches[2]);
+			$type = strtolower($matches[2]);
 
 			switch ($type) {
 			case 'table':

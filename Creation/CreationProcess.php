@@ -118,7 +118,7 @@ class CreationProcess
 			$objects = $file->getObjects();
 
 			foreach (array_keys($objects) as $object)
-				echo '    '.$object. "\n";
+				echo '    '.$object."\n";
 
 			$this->objects = array_merge($this->objects, $objects);
 		}

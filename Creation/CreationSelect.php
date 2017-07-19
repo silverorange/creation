@@ -33,7 +33,6 @@ class CreationSelect extends CreationObject
 				$deps[] = $matches[1];
 		}
 
-
 		return $deps;
 	}
 
