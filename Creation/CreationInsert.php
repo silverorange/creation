@@ -21,6 +21,8 @@ class CreationInsert extends CreationObject
 	protected function parseDeps()
 	{
 		$regexp = '/insert\s+into\s+([a-zA-Z0-9_]+)/ui';
+		$matches = array();
+
 		preg_match($regexp, $this->sql, $matches);
 
 		return array($matches[1]);

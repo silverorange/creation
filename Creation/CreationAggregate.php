@@ -13,6 +13,8 @@ class CreationAggregate extends CreationObject
 	protected function parseName()
 	{
 		$regexp = '/create\s+aggregate\s+([a-zA-Z0-9_]+)\s*\(/ui';
+		$matches = array();
+
 		preg_match($regexp, $this->sql, $matches);
 
 		return $matches[1];
@@ -29,7 +31,10 @@ class CreationAggregate extends CreationObject
 		$primative_types = array('varchar', 'char', 'numeric', 'int');
 
 		$regexp = '/create\s+aggregate\s+[a-zA-Z0-9_]+\s*\(([a-zA-Z0-9_]+)/ui';
+		$matches = array();
+
 		preg_match_all($regexp, $this->sql, $matches);
+
 		foreach ($matches[1] as $dep) {
 			if (!in_array(strtolower($dep), $primative_types)) {
 				$deps[] = $dep;
@@ -37,7 +42,10 @@ class CreationAggregate extends CreationObject
 		}
 
 		$regexp = '/stype\s*=\s*([a-zA-Z0-9_]+),/ui';
+		$matches = array();
+
 		preg_match_all($regexp, $this->sql, $matches);
+
 		foreach ($matches[1] as $dep) {
 			if (!in_array(strtolower($dep), $primative_types)) {
 				$deps[] = $dep;
@@ -46,7 +54,10 @@ class CreationAggregate extends CreationObject
 
 		// get dependent sfunc
 		$regexp = '/sfunc\s*=\s*([a-zA-Z0-9_]+),/ui';
+		$matches = array();
+
 		preg_match_all($regexp, $this->sql, $matches);
+
 		foreach ($matches[1] as $dep) {
 			$deps[] = $dep;
 		}

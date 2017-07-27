@@ -13,6 +13,8 @@ class CreationFunction extends CreationObject
 	protected function parseName()
 	{
 		$regexp = '/create(\s+or\s+replace)?\s+function\s+([a-zA-Z0-9_]+)/ui';
+		$matches = array();
+
 		preg_match($regexp, $this->sql, $matches);
 
 		return $matches[2];
@@ -24,6 +26,8 @@ class CreationFunction extends CreationObject
 	protected function parseDeps()
 	{
 		$regexp = '/returns\s+([a-zA-Z0-9_]+)\(/ui';
+		$matches = array();
+
 		preg_match_all($regexp, $this->sql, $matches);
 
 		$deps = array();

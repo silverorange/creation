@@ -105,7 +105,7 @@ class CreationProcess
 
 		$pattern = '/^\.?[^\.]+(\.'.$this->db_type.')?\.sql$/';
 		// use only the files with the specific extension and the generic files
-		if (preg_match($pattern, $filename)) {
+		if (preg_match($pattern, $filename) === 1) {
 			echo "Adding file ", $filename, "\n";
 			$file = new CreationFile($filename);
 			$objects = $file->getObjects();
