@@ -14,12 +14,16 @@ class CreationTrigger extends CreationObject
 	{
 		// pgsql and mysql trigger syntax
 		$regexp = '/create\s+trigger\s+([a-zA-Z0-9_]+)\s+.*\s+on\s+([a-zA-Z0-9_]+)/ui';
+		$matches = array();
+
 		if (preg_match($regexp, $this->sql, $matches) === 1) {
 			$name = $matches[2].'__'.$matches[1];
 		}
 
 		// mssql trigger syntax
 		$regexp = '/create\s+trigger\s+([a-zA-Z0-9_]+)\s+on\s+([a-zA-Z0-9_]+)\s+.*\s+as/ui';
+		$matches = array();
+
 		if (preg_match($regexp, $this->sql, $matches) === 1) {
 			$name = $matches[2].'__'.$matches[1];
 		}
@@ -36,12 +40,16 @@ class CreationTrigger extends CreationObject
 
 		// pgsql and mysql trigger syntax
 		$regexp = '/create\s+trigger\s+([a-zA-Z0-9_]+).* on\s+([a-zA-Z0-9_]+)/ui';
+		$matches = array();
+
 		if (preg_match_all($regexp, $this->sql, $matches) === 1) {
 			$deps = $matches[2];
 		}
 
 		// mssql trigger syntax
 		$regexp = '/create\s+trigger\s+([a-zA-Z0-9_]+)\s+on\s+([a-zA-Z0-9_]+)\s+.*\s+as/ui';
+		$matches = array();
+
 		if (preg_match($regexp, $this->sql, $matches) === 1) {
 			$deps = $matches[2];
 		}

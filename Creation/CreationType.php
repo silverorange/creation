@@ -13,6 +13,8 @@ class CreationType extends CreationObject
 	protected function parseName()
 	{
 		$regexp = '/create\s+type\s+([a-zA-Z0-9_]+)/ui';
+		$matches = array();
+
 		preg_match($regexp, $this->sql, $matches);
 
 		return $matches[1];

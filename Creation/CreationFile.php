@@ -248,6 +248,7 @@ class CreationFile
 
 		$types = implode('|', $types);
 		$regexp = '/create( or replace| unique)? ('.$types.')/ui';
+		$matches = array();
 
 		if (preg_match($regexp, $sql, $matches)) {
 			$type = strtolower($matches[2]);

@@ -13,6 +13,8 @@ class CreationTable extends CreationObject
 	protected function parseName()
 	{
 		$regexp = '/create\s+table\s+([a-zA-Z0-9_]+)/ui';
+		$matches = array();
+
 		preg_match($regexp, $this->sql, $matches);
 
 		return $matches[1];
@@ -24,6 +26,8 @@ class CreationTable extends CreationObject
 	protected function parseDeps()
 	{
 		$regexp = '/references\s+([a-zA-Z0-9_]+)\s*\(/ui';
+		$matches = array();
+
 		preg_match_all($regexp, $this->sql, $matches);
 
 		return $matches[1];

@@ -23,12 +23,16 @@ class CreationAlter extends CreationObject
 		$deps = array();
 
 		$regexp = '/alter\s+table\s+([a-zA-Z0-9_]+)/ui';
+		$matches = array();
+
 		preg_match($regexp, $this->sql, $matches);
 		$deps[] = $matches[1];
 
 		$regexp = '/references\s+([a-zA-Z0-9_]+)\s*\(/ui';
-		if (preg_match($regexp, $this->sql, $matches))
+		$matches = array();
+		if (preg_match($regexp, $this->sql, $matches) === 1) {
 			$deps[] = $matches[1];
+		}
 
 		return $deps;
 	}

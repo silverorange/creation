@@ -13,6 +13,8 @@ class CreationProcedure extends CreationObject
 	protected function parseName()
 	{
 		$regexp = '/create(\s+or\s+replace)?\s+procedure\s+([a-zA-Z0-9_]+)/ui';
+		$matches = array();
+
 		preg_match($regexp, $this->sql, $matches);
 
 		return $matches[2];
@@ -33,6 +35,8 @@ class CreationProcedure extends CreationObject
 				|
 				exec\s+([a-zA-Z0-9_]+)
 			)/uix';
+
+		$matches = array();
 
 		preg_match_all($regexp, $this->sql, $matches, PREG_SET_ORDER);
 
