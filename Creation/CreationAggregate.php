@@ -36,7 +36,7 @@ class CreationAggregate extends CreationObject
 		preg_match_all($regexp, $this->sql, $matches);
 
 		foreach ($matches[1] as $dep) {
-			if (!in_array(strtolower($dep), $primative_types)) {
+			if (!in_array(mb_strtolower($dep), $primative_types)) {
 				$deps[] = $dep;
 			}
 		}
@@ -47,7 +47,7 @@ class CreationAggregate extends CreationObject
 		preg_match_all($regexp, $this->sql, $matches);
 
 		foreach ($matches[1] as $dep) {
-			if (!in_array(strtolower($dep), $primative_types)) {
+			if (!in_array(mb_strtolower($dep), $primative_types)) {
 				$deps[] = $dep;
 			}
 		}

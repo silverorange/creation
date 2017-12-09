@@ -90,7 +90,7 @@ class CreationFile
 				PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 
 			foreach ($tokens as $token) {
-				switch (strtoupper($token)) {
+				switch (mb_strtoupper($token)) {
 				case '/*':
 					if (!$in_comment) {
 						if (!$in_string) {
@@ -251,7 +251,7 @@ class CreationFile
 		$matches = array();
 
 		if (preg_match($regexp, $sql, $matches)) {
-			$type = strtolower($matches[2]);
+			$type = mb_strtolower($matches[2]);
 
 			switch ($type) {
 			case 'table':
