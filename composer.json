@@ -29,6 +29,7 @@
 	],
 	"require": {
 		"php": ">=5.2.3",
+		"ext-mbstring": "*",
 		"silverorange/swat": "^3.0.0"
 	},
 	"require-dev": {

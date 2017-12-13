@@ -33,9 +33,11 @@ class CreationFunction extends CreationObject
 		$deps = array();
 		$primative_types = array('varchar', 'char', 'numeric', 'int');
 
-		foreach ($matches[1] as $dep)
-			if (!in_array(strtolower($dep), $primative_types))
+		foreach ($matches[1] as $dep) {
+			if (!in_array(mb_strtolower($dep), $primative_types)) {
 				$deps[] = $dep;
+			}
+		}
 
 		return $deps;
 	}
