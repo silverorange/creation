@@ -220,12 +220,17 @@ class CreationFile
 		}
 
 		// last statement does not need a semicolon terminator
-		if (!$in_comment && !$in_inline_comment)
+		if (!$in_comment && !$in_inline_comment) {
 			$statements[] = trim($statement);
+		}
 
 		// remove empty statements
-		$statements = array_filter($statements,
-			create_function('$statement', 'return $statement != \'\';'));
+		$statements = array_filter(
+			$statements,
+			function ($statement) {
+				return $statement != '';
+			}
+		);
 
 		return $statements;
 	}
